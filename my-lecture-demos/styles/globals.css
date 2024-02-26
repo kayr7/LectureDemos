@@ -31,3 +31,47 @@ body {
     text-wrap: balance;
   }
 }
+
+
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.demo-link {
+  
+  color: white; /* White text color */
+  text-decoration: none; /* Remove underline from links */
+  padding: 10px 20px; /* Padding inside the link boxes */
+  border-radius: 5px; /* Rounded corners for the link boxes */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+
+/* Example styles for header and footer */
+header, footer {
+  padding: 20px;
+  text-align: center;
+  background-color: #f3f3f3;
+}
+
+/* Additional styling for the ToneGenerator component for better alignment */
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button, input[type="range"] {
+  margin: 10px;
+}

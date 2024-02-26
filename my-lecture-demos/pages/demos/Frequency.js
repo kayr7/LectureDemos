@@ -16,7 +16,7 @@ import WaterfallVisualizer from './components/WaterfallVisualizer';
         const audioContext = new AudioContext();
         audioContextRef.current = audioContext;
         const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256;
+        analyser.fftSize = 2048;
         analyserRef.current = analyser;
   
         const source = audioContext.createMediaStreamSource(mediaStream);
@@ -27,7 +27,7 @@ import WaterfallVisualizer from './components/WaterfallVisualizer';
     }, [mediaStream]);
   
     return (
-      <div>
+      <div className="demo-container">
         <h1>Audio Waterfall Visualization</h1>
         <AudioCapture setMediaStream={setMediaStream} />
         {analyserRef.current && <WaterfallVisualizer analyser={analyserRef.current} />}
