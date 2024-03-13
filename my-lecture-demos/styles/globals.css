@@ -38,6 +38,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  margin-top: 50px;
 }
 
 .main-content {
@@ -57,12 +58,19 @@ body {
   transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
+h1 {
+  margin-bottom: 10%;
+}
 
 /* Example styles for header and footer */
 header, footer {
   padding: 20px;
   text-align: center;
-  background-color: #f3f3f3;
+  background-color: #282121;
+}
+
+footer {
+  margin-top: auto;
 }
 
 /* Additional styling for the ToneGenerator component for better alignment */

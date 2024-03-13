@@ -13,6 +13,9 @@ export default function Home() {
       <Link className="demo-link" href="/demos/FrequencyListening">
         Frequency Perception
       </Link>
+      <Link className="demo-link" href="/demos/ImpulseAnswer">
+        Impulse Answer
+      </Link>
 
     </div>
   );
