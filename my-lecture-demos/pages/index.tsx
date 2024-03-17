@@ -16,6 +16,10 @@ export default function Home() {
       <Link className="demo-link" href="/demos/ImpulseAnswer">
         Impulse Answer
       </Link>
+      <Link className="demo-link" href="/demos/SpeechRecoVisualizer">
+        Speech Reco preproc Visualizer
+      </Link>
+
 
     </div>
   );
