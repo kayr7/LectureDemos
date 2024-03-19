@@ -55,6 +55,7 @@ class AudioStreamThread(QThread):
         self.running = False
         self.wait()
         self.close_stream()
+        
 
     def __del__(self):
         self.pyaudio_instance.terminate()
@@ -68,6 +69,7 @@ class AudioVisualizer(QMainWindow):
 
         self.use_hamming_window = True  # Default to true or false as you prefer
         self.use_log_scale = True  # Attribute to control the logarithmic scale application
+
 
 
         self.mel_spectrum_image = np.zeros((100, 256))  # Placeholder image
@@ -89,6 +91,8 @@ class AudioVisualizer(QMainWindow):
         self.update_timer.start(20)  # Update every 100 ms
 
         self.audio_data_buffer = []
+        self.saved_blocks = []
+        self.projection_matrix = np.load('./projection.npy')
 
     def initUI(self):
         self.setWindowTitle('Audio Signal Processing Visualizer')
@@ -187,6 +191,9 @@ class AudioVisualizer(QMainWindow):
         if self.audio_thread.isRunning():
             self.audio_thread.stop()
             self.toggle_audio_btn.setText('Start Audio Capture')
+            #if len(self.saved_blocks) > 500:
+            #    array = np.array(self.saved_blocks)
+            #    np.save('./samples.npy', array)
         else:
             self.audio_thread.start()
             self.toggle_audio_btn.setText('Stop Audio Capture')
@@ -257,6 +264,11 @@ class AudioVisualizer(QMainWindow):
                 dct_mel = self.apply_lifter(dct_mel)
             self.update_dct_mel_visualization(dct_mel)
 
+        #self.saved_blocks.append(dct_mel)
+
+
+        
+
 
     def compute_mel_spectrum(self, fft_data, sample_rate=22050, n_filters=100, n_fft=512):
         # Generate Mel filter bank
@@ -326,6 +338,10 @@ class AudioVisualizer(QMainWindow):
                                 np.clip((right - bin_freqs) / (right - center), 0, 1) * (bin_freqs > center)
         
         return filters
+    
+    def compute_2d_meldct_projection(self, data):
+        transformed_data = np.dot(data, self.projection_matrix)
+        return transformed_data
 
 
     def update_raw_audio_visualization(self, data):
@@ -335,19 +351,19 @@ class AudioVisualizer(QMainWindow):
         self.raw_audio_image[:, -1] = column.flatten()[:100]  # Adjust length if necessary
 
         self.ax_raw_audio.clear()
-        self.ax_raw_audio.imshow(self.raw_audio_image, aspect='auto', cmap='viridis', vmin=0, vmax=1.5)
+        self.ax_raw_audio.imshow(self.raw_audio_image, aspect='auto', cmap='viridis')
         self.ax_raw_audio.axis('off')
         self.raw_audio_figure.draw()
 
     def update_fft_audio_visualization(self, power_spectrum):
         # Normalize and resize for visualization
 
-        column = power_spectrum# / np.max(power_spectrum)  # Normalize
+        column = power_spectrum / np.max(power_spectrum)  # Normalize
         self.fft_audio_image = np.roll(self.fft_audio_image, -1, axis=1)
         self.fft_audio_image[:, -1] = column.flatten()[:100]  # Adjust length if necessary
         
         self.ax_fft_audio.clear()
-        self.ax_fft_audio.imshow(self.fft_audio_image, aspect='auto', cmap='viridis', vmin=0, vmax=1.5)
+        self.ax_fft_audio.imshow(self.fft_audio_image, aspect='auto', cmap='viridis')
         self.ax_fft_audio.axis('off')
         self.fft_audio_figure.draw()
 
@@ -360,7 +376,7 @@ class AudioVisualizer(QMainWindow):
         self.dct_mel_image[:, -1] = dct_mel.flatten()[:100]
         
         self.ax_dct_mel.clear()
-        self.ax_dct_mel.imshow(self.dct_mel_image, aspect='auto', cmap='viridis', vmin=0.0, vmax=1.0)
+        self.ax_dct_mel.imshow(self.dct_mel_image, aspect='auto', cmap='viridis', vmin=0.0, vmax=1.5)
         self.ax_dct_mel.axis('off')
         self.dct_mel_figure.draw()
     
