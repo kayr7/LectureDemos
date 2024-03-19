@@ -93,6 +93,7 @@ class AudioVisualizer(QMainWindow):
         self.audio_data_buffer = []
         self.saved_blocks = []
         self.projection_matrix = np.load('./projection.npy')
+        self.last_projections = []
 
     def initUI(self):
         self.setWindowTitle('Audio Signal Processing Visualizer')
@@ -174,6 +175,12 @@ class AudioVisualizer(QMainWindow):
         self.ax_dct_mel.imshow(self.dct_mel_image, aspect='auto', cmap='viridis')
         self.ax_dct_mel.axis('off')
 
+
+        self.projection_figure = FigureCanvas(Figure())
+        self.layout.addWidget(self.projection_figure)
+        self.ax_projection = self.projection_figure.figure.subplots()
+        self.ax_projection.set_title("2D Projection of DCT Mel Features")
+        self.ax_projection.grid(True)
 
         self.setCentralWidget(self.main_widget)
         self.show()
@@ -266,7 +273,8 @@ class AudioVisualizer(QMainWindow):
 
         #self.saved_blocks.append(dct_mel)
 
-
+            projection_2d = self.compute_2d_meldct_projection(dct_mel)
+            self.update_projection_visualization(projection_2d)
         
 
 
@@ -389,6 +397,22 @@ class AudioVisualizer(QMainWindow):
         self.ax_mel_spectrum.imshow(self.mel_spectrum_image, aspect='auto', cmap='viridis')
         self.ax_mel_spectrum.axis('off')
         self.mel_spectrum_figure.draw()
+
+
+
+    def update_projection_visualization(self, projection_2d):
+        print(projection_2d)
+        self.last_projections.append(projection_2d)
+        self.last_projections = self.last_projections[-3:]
+        if len(self.last_projections) > 0:
+            projection_2d = np.mean(self.last_projections, axis=0)
+        
+        self.ax_projection.clear()
+        self.ax_projection.scatter(projection_2d[0], projection_2d[1], c='red')
+        self.ax_projection.set_xlim(-200, 500)  # Set these limits based on your data range
+        self.ax_projection.set_ylim(-300, 300)  # Set these limits based on your data range
+        self.ax_projection.grid(True)
+        self.projection_figure.draw()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
