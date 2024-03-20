@@ -88,7 +88,7 @@ class AudioVisualizer(QMainWindow):
         self.audio_thread.data_signal.connect(self.process_audio_data)
         self.update_timer = QTimer(self)
         self.update_timer.timeout.connect(self.update_visualizations)
-        self.update_timer.start(20)  # Update every 100 ms
+        self.update_timer.start(20)  # Update every 20 ms
 
         self.audio_data_buffer = []
         self.saved_blocks = []
@@ -127,7 +127,7 @@ class AudioVisualizer(QMainWindow):
         self.hamming_window_checkbox.stateChanged.connect(self.toggle_hamming_window)
         self.layout.addWidget(self.hamming_window_checkbox)
 
-# Checkbox for toggling FFT audio visualization
+        # Checkbox for toggling FFT audio visualization
         self.fft_audio_checkbox = QCheckBox("Show FFT Audio", self)
         self.fft_audio_checkbox.setChecked(True)
         self.fft_audio_checkbox.stateChanged.connect(self.toggle_fft_audio)
@@ -266,12 +266,14 @@ class AudioVisualizer(QMainWindow):
 
         # Compute DCT of Mel Spectrum
         if self.display_dct_mel:
-            dct_mel = dct(fft_data, type=2, norm='ortho')
+            dct_mel_vis = dct(fft_data, type=2, norm='ortho')
             if self.use_liftering:
-                dct_mel = self.apply_lifter(dct_mel)
-            self.update_dct_mel_visualization(dct_mel)
+                dct_mel = self.apply_lifter(dct_mel_vis)
+                dct_mel_vis = np.repeat(dct_mel, 10)
 
-        #self.saved_blocks.append(dct_mel)
+            self.update_dct_mel_visualization(dct_mel_vis)
+
+            #self.saved_blocks.append(dct_mel)
 
             projection_2d = self.compute_2d_meldct_projection(dct_mel)
             self.update_projection_visualization(projection_2d)
@@ -302,11 +304,7 @@ class AudioVisualizer(QMainWindow):
         Returns:
         - The liftered DCT coefficients.
         """
-        return np.repeat((dct_coefficients)[1:-49], 2)
-        N = len(dct_coefficients)
-        n = np.arange(N)
-        lifter = 1 + (L / 2) * np.sin(np.pi * n / L)
-        return np.repeat((dct_coefficients * lifter)[1:-49], 2)
+        return dct_coefficients[1:11]
 
 
 
