@@ -25,7 +25,6 @@ const WaterfallVisualizer = ({ analyser, width = 600, height = 400 }) => {
       for (let i = 0; i < bufferLength; i++) {
         const value = dataArray[i];
         const percent = value / 256;
-        const barHeight = percent * height;
 
         const [r, g, b] = [percent * 255, (1 - percent) * 255, 128]; // Example color calculation
         ctx.fillStyle = `rgb(${r},${g},${b})`;
