@@ -9,75 +9,140 @@ export default function SpeechRecognitionVisualizer() {
   const [showFrequencySpectrum, setShowFrequencySpectrum] = useState(true);
   const [showLogFrequencySpectrum, setShowLogFrequencySpectrum] = useState(true);
   const [showMelSpectrum, setShowMelSpectrum] = useState(true);
-
   const [showMelCepstrum, setShowMelCepstrum] = useState(true);
   const [showMelCepstrumLiftered, setShowMelCepstrumLiftered] = useState(true);
 
 
   return (
-    <div className="p-4 md:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Audio Visualization</h1>
+    <div className="flex justify-center min-h-screen p-4 md:p-8">
+    <div className="max-w-4xl w-full"> {/* Centering container with max-width */}
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Audio Visualization</h1>
       <AudioCapture setMediaStream={setMediaStream} />
-      <div className="flex flex-col items-center gap-6">
+      
+      <div className="flex flex-col items-start gap-6 w-full">
         {/* Toggle for Raw Audio */}
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150 ease-in-out" onClick={() => setShowRawAudio(!showRawAudio)}>
-          {showRawAudio ? 'Hide' : 'Show'} Raw Audio
-        </button>
+        <div className="w-full pl-4 md:pl-8">
+          <label className="flex items-center cursor-pointer">
+            <div className="ml-3 text-gray-700 font-medium mr-6">
+              <h2 className="text-xl font-semibold">Raw Audio</h2>
+            </div>
+            <div className="relative">
+              <input type="checkbox" id="rawAudioToggle" className="sr-only" checked={showRawAudio} onChange={() => setShowRawAudio(!showRawAudio)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-200 ease-out ${showRawAudio ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ease-out ${showRawAudio ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            </div>
+          </label>
+        </div>
         {showRawAudio && (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-4">Raw Audio</h2>
             <WaterfallVisualizer mediaStream={mediaStream} visualizationType="rawAudio" width={600} height={256} />
           </div>
         )}
 
         {/* Toggle for Frequency Spectrum */}
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150 ease-in-out" onClick={() => setShowFrequencySpectrum(!showFrequencySpectrum)}>
-          {showFrequencySpectrum ? 'Hide' : 'Show'} Frequency Spectrum
-        </button>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150 ease-in-out" onClick={() => setShowLogFrequencySpectrum(!showLogFrequencySpectrum)}>
-          {showLogFrequencySpectrum ? 'No' : 'Use'} Log Frequency Spectrum
-        </button>
+        <div className="w-full pl-4 md:pl-8">
+          <label className="flex items-center cursor-pointer">
+            <div className="ml-3 text-gray-700 font-medium mr-6">
+            <h2 className="text-xl font-semibold">Frequency Spectrum</h2>
+            </div>
+            <div className="relative">
+              <input type="checkbox" id="rawAudioToggle" className="sr-only" checked={showFrequencySpectrum} onChange={() => setShowFrequencySpectrum(!showFrequencySpectrum)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-200 ease-out ${showFrequencySpectrum ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ease-out ${showFrequencySpectrum ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            </div>
+          </label>
+        </div>
         {showFrequencySpectrum && (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-4">Frequency Spectrum</h2>
-            <WaterfallVisualizer mediaStream={mediaStream} showLogVis={showLogFrequencySpectrum ? 'True' : 'False'} visualizationType="frequencySpectrum" width={600} height={256} />
+            
+            <WaterfallVisualizer mediaStream={mediaStream} showLogVis={'False'} visualizationType="frequencySpectrum" width={600} height={256} />
           </div>
         )}
 
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150 ease-in-out" onClick={() => setShowMelSpectrum(!showMelSpectrum)}>
-          {showMelSpectrum ? 'Hide' : 'Show'} Mel Spectrum
-        </button>
+        <div className="w-full pl-4 md:pl-8">
+          <label className="flex items-center cursor-pointer">
+            <div className="ml-3 text-gray-700 font-medium mr-6">
+            <h2 className="text-xl font-semibold">Log Frequency Spectrum</h2>
+            </div>
+            <div className="relative">
+              <input type="checkbox" id="rawAudioToggle" className="sr-only" checked={showLogFrequencySpectrum} onChange={() => setShowLogFrequencySpectrum(!showLogFrequencySpectrum)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-200 ease-out ${showLogFrequencySpectrum ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ease-out ${showLogFrequencySpectrum ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            </div>
+          </label>
+        </div>
+        {showLogFrequencySpectrum && (
+          <div className="text-center">
+            <WaterfallVisualizer mediaStream={mediaStream} showLogVis={'True'} visualizationType="frequencySpectrum" width={600} height={256} />
+          </div>
+        )}
+
+
+
+        <div className="w-full pl-4 md:pl-8">
+          <label className="flex items-center cursor-pointer">
+            <div className="ml-3 text-gray-700 font-medium mr-6">
+            <h2 className="text-xl font-semibold">Mel Spectrum</h2>
+            </div>
+            <div className="relative">
+              <input type="checkbox" id="rawAudioToggle" className="sr-only" checked={showMelSpectrum} onChange={() => setShowMelSpectrum(!showMelSpectrum)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-200 ease-out ${showMelSpectrum ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ease-out ${showMelSpectrum ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            </div>
+          </label>
+        </div>
         {showMelSpectrum && (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-4">Mel Spectrum</h2>
             <WaterfallVisualizer mediaStream={mediaStream} visualizationType="MelSpectrum" width={600} height={256} />
             
           </div>
         )}
 
 
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150 ease-in-out" onClick={() => setShowMelCepstrum(!showMelCepstrum)}>
-          {showMelCepstrum ? 'Hide' : 'Show'} Mel Cepstrum
-        </button>
+        
+        <div className="w-full pl-4 md:pl-8">
+          <label className="flex items-center cursor-pointer">
+            <div className="ml-3 text-gray-700 font-medium mr-6">
+            <h2 className="text-xl font-semibold">Mel Cepstrum</h2>
+            </div>
+            <div className="relative">
+              <input type="checkbox" id="rawAudioToggle" className="sr-only" checked={showMelCepstrum} onChange={() => setShowMelCepstrum(!showMelCepstrum)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-200 ease-out ${showMelCepstrum ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ease-out ${showMelCepstrum ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            </div>
+          </label>
+        </div>        
+
         {showMelCepstrum && (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-4">Mel Cepstrum</h2>
             <WaterfallVisualizer mediaStream={mediaStream} visualizationType="MelCepstrum" width={600} height={256} />
             
           </div>
         )}
 
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-150 ease-in-out" onClick={() => setShowMelCepstrumLiftered(!showMelCepstrumLiftered)}>
-          {showMelCepstrumLiftered ? 'Hide' : 'Show'} Liftered Mel Cepstrum
-        </button>
+
+
+        <div className="w-full pl-4 md:pl-8">
+          <label className="flex items-center cursor-pointer">
+            <div className="ml-3 text-gray-700 font-medium mr-6">
+            <h2 className="text-xl font-semibold">Liftered Mel Cepstrum</h2>
+            </div>
+            <div className="relative">
+              <input type="checkbox" id="rawAudioToggle" className="sr-only" checked={showMelCepstrumLiftered} onChange={() => setShowMelCepstrumLiftered(!showMelCepstrumLiftered)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-200 ease-out ${showMelCepstrumLiftered ? 'bg-blue-500' : 'bg-gray-600'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-200 ease-out ${showMelCepstrumLiftered ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            </div>
+          </label>
+        </div>        
+
         {showMelCepstrumLiftered && (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-4">Liftered Mel Cepstrum</h2>
             <WaterfallVisualizer mediaStream={mediaStream} visualizationType="MelCepstrumLiftered" width={600} height={256} />
             
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

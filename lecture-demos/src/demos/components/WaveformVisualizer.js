@@ -42,8 +42,8 @@ const WaveformVisualizer = ({ audioData }) => {
   }, [audioData]);
 
   return (
-    <div style={{ border: '1px solid #000', marginTop: '20px' }}>
-      <canvas ref={canvasRef} width="400" height="100"></canvas>
+    <div style={{ border: '1px solid #000', marginTop: '20px', width: '600px'}}>
+      <canvas ref={canvasRef} width="600" height="300"></canvas>
     </div>
   );
 };

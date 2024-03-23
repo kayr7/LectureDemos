@@ -46,10 +46,14 @@ export default function Home() {
 
 
   return (
-    <div className="demo-container">
-      <h1>Real-time Audio Processing and Visualization</h1>
+    <div className="flex justify-center min-h-screen p-4 md:p-8 bg-gray-50">
+      <div className="max-w-4xl w-full">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Real-time Audio Processing and Visualization</h1>
       <AudioCapture setMediaStream={setMediaStream} />
+      <div className="mt-6 flex justify-center">
       <WaveformVisualizer audioData={audioData} />
+      </div>
+    </div>
     </div>
   );
 }
